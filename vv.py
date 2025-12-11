@@ -5,7 +5,7 @@ import math
 import numpy as np
 
 # =================================================================
-# 1. CONFIGURATION AND ORGANIZATION-SPECIFIC RULES
+# 1. CONFIGURATION AND ORGANIZATION-SPECIFIC RULES (MODIFIED)
 # =================================================================
 
 SHIFT_START = time(9, 15)
@@ -20,8 +20,8 @@ HALF_DAY_END_TIME_NEW = time(13, 30)
 # Evening Half Day trigger: OUT time <= 16:45
 EVENING_HALF_DAY_TIME = time(16, 45)
 
-# 1 Hour Leave window: 16:46 to 17:44
-ONE_HOUR_LEAVE_START_TIME = time(16, 46)
+# 1 Hour Leave window: 16:44 to 17:44 (CORRECTED)
+ONE_HOUR_LEAVE_START_TIME = time(16, 44)  # <-- CHANGE APPLIED HERE
 ONE_HOUR_LEAVE_END_TIME = time(17, 44)
 
 # =================================================================
@@ -83,7 +83,7 @@ def calculate_early_out_status(out_time):
     one_hour_leave_start_dt = datetime.combine(today, ONE_HOUR_LEAVE_START_TIME)
     one_hour_leave_end_dt = datetime.combine(today, ONE_HOUR_LEAVE_END_TIME)
 
-    # 1 Hour Leave check (OUT time between 16:46 and 17:44)
+    # 1 Hour Leave check (OUT time between 16:44 and 17:44)
     if out_time_dt >= one_hour_leave_start_dt and out_time_dt <= one_hour_leave_end_dt:
         return 1, '1 Hour Leave', 0
 
@@ -247,7 +247,7 @@ def generate_consolidated_report(df_processed):
 
 
 # =================================================================
-# 5. STREAMLIT APP LAYOUT & PREMIUM STYLING (MODIFIED)
+# 5. STREAMLIT APP LAYOUT & PREMIUM STYLING
 # =================================================================
 
 def app():
@@ -314,7 +314,7 @@ def app():
                 st.error("Could not parse employee data. Please ensure the file structure is correct.")
                 return 
 
-            # --- MODIFIED: Generate the single consolidated report ---
+            # Generate the single consolidated report
             consolidated_summary_df, _ = generate_consolidated_report(df_processed)
 
             if not consolidated_summary_df.empty:
@@ -334,8 +334,6 @@ def app():
             else:
                 st.warning("No attendance records found for the present (P) status.")
             
-            # --- END MODIFIED SECTION ---
-
         except Exception as e:
             # Detailed error message to help diagnose processing issues
             st.error(f"An unexpected error occurred during processing. Error: {type(e).__name__}: {e}")
